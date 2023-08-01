@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Created with Vectornator (http://vectornator.io/) -->
-<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1000 1000" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<defs/>
-<g id="Logo">
-<path d="M872.402 455.315C889.319 463.793 900 481.093 900 500.015C900 518.936 889.319 536.237 872.402 544.715L172.378 894.714C154.643 903.588 133.339 901.142 118.077 888.48C102.814 875.818 96.478 855.332 101.926 836.264L173.378 586.265C179.519 564.797 199.15 550.002 221.48 550.015L450.038 550.015C477.653 550.015 500.039 527.629 500.039 500.015C500.039 472.4 477.653 450.015 450.038 450.015L221.48 450.015C199.15 450.027 179.519 435.233 173.378 413.765L101.976 163.765C96.5172 144.703 102.839 124.217 118.089 111.545C133.339 98.8726 154.637 96.4089 172.378 105.265L872.402 455.265L872.402 455.315Z" fill="#3b82ff" fill-rule="nonzero" opacity="1" stroke="none"/>
-</g>
-</svg>

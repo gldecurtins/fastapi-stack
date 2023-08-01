@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  thing:
-    image: ghcr.io/gldecurtins/thing:main
+  stack:
+    image: ghcr.io/gldecurtins/stack:main
     networks:
       - traefik
     ports:
@@ -13,10 +13,11 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.lbswarm=true"
-        - "traefik.http.routers.thing.rule=Host(`thing.uemd.net`)"
-        - "traefik.http.routers.thing.entrypoints=websecure"
-        - "traefik.http.services.thing.loadbalancer.server.port=2001"
-        - "traefik.http.routers.thing.service=thing"
+        - "traefik.http.routers.stack.rule=Host(`stack.uemd.net`)"
+        - "traefik.http.routers.stack.entrypoints=websecure"
+        - "traefik.http.routers.stack.service=stack"
+        - "traefik.http.services.stack.loadbalancer.server.port=2001"
+
 
 networks:
   traefik:
