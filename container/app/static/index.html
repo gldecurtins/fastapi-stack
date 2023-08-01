@@ -433,7 +433,7 @@
   </head>
 
   <body>
-    <div class="font-mono p-3" x-data="thing" x-init="connect">
+    <div class="font-mono p-3" x-data="stack" x-init="connect">
       <header class="sticky top-0 z-50">
         <div class="relative flex pb-3">
           <input
@@ -467,7 +467,7 @@
     </div>
     <script>
       document.addEventListener("alpine:init", () => {
-        Alpine.data("thing", () => ({
+        Alpine.data("stack", () => ({
           disabled: true,
           placeholder: "Disconnected",
           socket: null,
