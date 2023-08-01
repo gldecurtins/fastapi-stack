@@ -3,7 +3,7 @@ from connection import ConnectionManager
 
 
 class CommandManager:
-    async def execute_valid_commands(
+    async def search_for_command(
         self, received_text: str, websocket: WebSocket, connections: dict
     ):
         lower_received_text = received_text.lower()

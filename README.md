@@ -1,10 +1,10 @@
 # stack-srv
+
 Stack server
 
 Chat with websockets.
 
-Installation
-============
+# Installation
 
 Clone repo and install library::
 
@@ -13,7 +13,7 @@ Clone repo and install library::
 
 Run application::
 
-    $ docker-compose up
+    $ docker-compose -f "docker-compose.dev.yml" up
 
 Open browser::
 

@@ -16,7 +16,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             received_text = await websocket.receive_text()
-            await CommandManager().execute_valid_commands(
+            await CommandManager().search_for_command(
                 received_text, websocket, connections
             )
     except WebSocketDisconnect:
