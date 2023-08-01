@@ -27,9 +27,9 @@ class ConnectionManager:
         await self.send_to_user(text, websocket)
         await self.send_to_channel(text, websocket, connections)
 
-    async def disconnect(self, websocket: WebSocket):
+    async def disconnect(self, websocket: WebSocket, connections: dict):
         text = f">> {self.connections[websocket]['user_name']} disconnected"
-        await self.send_to_channel(text, websocket)
+        await self.send_to_channel(text, websocket, connections)
         del self.connections[websocket]
 
     async def send_to_user(self, text: str, websocket: WebSocket):

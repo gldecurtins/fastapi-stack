@@ -20,7 +20,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 received_text, websocket, connections
             )
     except WebSocketDisconnect:
-        await connections.disconnect(websocket)
+        await connections.disconnect(websocket, connections)
 
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
