@@ -1,8 +1,6 @@
-# stack-srv
+# Stack server
 
-Stack server
-
-Chat with websockets.
+Text-only chat with websockets. Minimalistic desgin.
 
 # Installation
 
