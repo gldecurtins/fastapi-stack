@@ -1,4 +1,5 @@
 from typing import TypedDict, NotRequired
+from message import MessageManager
 from fastapi import WebSocket
 from faker import Faker
 
@@ -18,26 +19,26 @@ class ConnectionManager:
     def __init__(self):
         self.connections: Connection = {}
 
-    async def connect(self, websocket: WebSocket, connections: dict):
+    async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.connections[websocket] = {}
         self.connections[websocket]["user_name"] = get_random_name()
         self.connections[websocket]["channel_name"] = "1"
-        text = f">> {self.connections[websocket]['user_name']} connected"
-        await self.send_to_user(text, websocket)
-        await self.send_to_channel(text, websocket, connections)
+        text_to_send = f">> {self.connections[websocket]['user_name']} connected"
+        await MessageManager.send_text_to_user(self, text_to_send, websocket)
+        await MessageManager.send_text_to_channel(
+            self,
+            text_to_send=text_to_send,
+            websocket=websocket,
+            connections=self,
+        )
 
-    async def disconnect(self, websocket: WebSocket, connections: dict):
-        text = f">> {self.connections[websocket]['user_name']} disconnected"
-        await self.send_to_channel(text, websocket, connections)
+    async def disconnect(self, websocket: WebSocket):
+        text_to_send = f">> {self.connections[websocket]['user_name']} disconnected"
+        await MessageManager.send_text_to_channel(
+            self,
+            text_to_send=text_to_send,
+            websocket=websocket,
+            connections=self,
+        )
         del self.connections[websocket]
-
-    async def send_to_user(self, text: str, websocket: WebSocket):
-        await websocket.send_text(text)
-
-    async def send_to_channel(self, text: str, websocket: WebSocket, connections: dict):
-        from_channel_name = connections.connections[websocket]["channel_name"]
-        for connection in connections.connections:
-            to_channel_name = connections.connections[connection]["channel_name"]
-            if from_channel_name is to_channel_name and connection is not websocket:
-                await connection.send_text(text)
