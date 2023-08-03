@@ -3,6 +3,7 @@
     "adrianwilczynski.alpine-js-intellisense",
     "bradlc.vscode-tailwindcss",
     "ms-python.python",
+    "ms-python.black-formatter",
     "esbenp.prettier-vscode",
     "ms-vscode-remote.remote-containers"
   ]
