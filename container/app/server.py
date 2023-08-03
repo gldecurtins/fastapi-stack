@@ -18,13 +18,9 @@ class ServerManager:
         self.connections[websocket]["channel_name"] = "1"
         text_to_send = f">> {self.connections[websocket]['user_name']} connected"
         await MessageManager().send_text_to_user(text_to_send, websocket)
-        await MessageManager().send_text_to_channel(
-            text_to_send, websocket, self.connections
-        )
+        await MessageManager().send_text_to_channel(text_to_send, websocket, self.connections)
 
     async def disconnect(self, websocket: WebSocket):
         text_to_send = f">> {self.connections[websocket]['user_name']} disconnected"
-        await MessageManager().send_text_to_channel(
-            text_to_send, websocket, self.connections
-        )
+        await MessageManager().send_text_to_channel(text_to_send, websocket, self.connections)
         del self.connections[websocket]

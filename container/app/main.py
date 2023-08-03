@@ -14,9 +14,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             received_text = await websocket.receive_text()
-            await MessageManager().validate_received_text(
-                received_text, websocket, server.connections
-            )
+            await MessageManager().validate_received_text(received_text, websocket, server.connections)
     except WebSocketDisconnect:
         await server.disconnect(websocket)
 
