@@ -1,21 +1,25 @@
 from fastapi import WebSocket
+import logging
 
 
 class MessageManager:
     async def validate_received_text(self, received_text: str, websocket: WebSocket, connections: dict):
         lower_received_text = received_text.lower()
-        if lower_received_text.startswith("a.") or lower_received_text.startswith("action"):
+        if lower_received_text.startswith("a."):
             await self.send_text_as_action(received_text, websocket, connections)
 
-        elif lower_received_text.startswith("s.") or lower_received_text.startswith("show"):
+        elif lower_received_text.startswith("s."):
             await self.show_connections(websocket, connections)
 
-        elif lower_received_text.startswith("c.") or lower_received_text.startswith("channel"):
+        elif lower_received_text.startswith("c."):
             await self.change_channel(received_text, websocket, connections)
-        elif lower_received_text.startswith("h.") or lower_received_text.startswith("help"):
+
+        elif lower_received_text.startswith("h."):
             await self.help_cmd(websocket)
-        elif lower_received_text.startswith("w.") or lower_received_text.startswith("whisper"):
-            await self.whisper_text_to_user(received_text, connections)
+
+        elif lower_received_text.startswith("w."):
+            await self.whisper_text_to_user(received_text, websocket, connections)
+
         else:
             await self.send_text_to_user(received_text, websocket)
             await self.send_text_to_channel(
@@ -35,46 +39,54 @@ class MessageManager:
                 await connection.send_text(text_to_send)
 
     async def send_text_as_action(self, received_text: str, websocket: WebSocket, connections: dict):
-        action_text = f"-> {connections[websocket]['user_name']} {received_text.split(' ', 1)[1]}"
+        action_text = f"-> {connections[websocket]['user_name']} {str(received_text.split(' ', 1)[1])}"
         await self.send_text_to_user(action_text, websocket)
         await self.send_text_to_channel(action_text, websocket, connections)
 
-    async def whisper_text_to_user(self, received_text: str, connections: dict):
-        to_user = received_text.split()[1]
-        text = "hoi"
+    async def whisper_text_to_user(self, received_text: str, websocket: WebSocket, connections: dict):
+        try:
+            to_user = received_text.split()[1].title()
+            text = f"<*{connections[websocket]['user_name']}*> {received_text.split(' ', 2)[2]}"
 
-        for connection in connections:
-            if connections[connection]["user_name"] is to_user:
-                await self.send_text_to_user(text, connections[connection])
+            for connection, detail in connections.items():
+                if detail["user_name"] == to_user:
+                    await self.send_text_to_user(received_text, websocket)
+                    await self.send_text_to_user(text, connection)
+        except IndexError:
+            await self.send_text_to_user(">> w. <user name> <text> to whisper", websocket)
 
     async def change_channel(self, received_text: str, websocket: WebSocket, connections: dict):
-        channel_name = received_text.split()[1]
-        await self.send_text_to_channel(
-            f">> {connections[websocket]['user_name']} leaves this channel",
-            websocket,
-            connections,
-        )
-        connections[websocket]["channel_name"] = channel_name
-        await self.send_text_to_user(f">> Channel changed to {channel_name}", websocket)
-        await self.send_text_to_channel(
-            f">> {connections[websocket]['user_name']} joined this channel",
-            websocket,
-            connections,
-        )
+        try:
+            channel_name = received_text.split()[1]
+            await self.send_text_to_channel(
+                f">> {connections[websocket]['user_name']} leaves this channel",
+                websocket,
+                connections,
+            )
+            connections[websocket]["channel_name"] = channel_name
+            await self.send_text_to_user(f">> Channel changed to {channel_name}", websocket)
+            await self.send_text_to_channel(
+                f">> {connections[websocket]['user_name']} joined this channel",
+                websocket,
+                connections,
+            )
+        except IndexError:
+            await self.send_text_to_user(">> c. <channel name> to change the channel", websocket)
 
     async def show_connections(self, websocket: WebSocket, connections: dict):
         for connection in connections:
             await self.send_text_to_user(
-                f"{connections[connection]['user_name']} @{connections[connection]['channel_name']}",
+                f">> {connections[connection]['user_name']} @{connections[connection]['channel_name']}",
                 websocket,
             )
 
     async def help_cmd(self, websocket: WebSocket):
         help_text = [
-            "a. or action <text> action something",
-            "c. or channel <channel name> to change the channel",
-            "s. or show to show who's online",
-            "h. or help to show this help",
+            ">> a. <text> action something",
+            ">> c. <channel name> to change the channel",
+            ">> w. <user name> <text> to whisper",
+            ">> s. to show who's online",
+            ">> h. to show this help",
         ]
         for text in reversed(help_text):
             await self.send_text_to_user(text, websocket)
