@@ -488,7 +488,7 @@
             socket.onclose = () => {
               this.socket = null;
               this.disabled = true;
-              this.placeholder = "Disconnected";
+              this.placeholder = "Disconnected. Reload to connect.";
             };
 
             socket.onmessage = (message) => {
@@ -502,14 +502,21 @@
               this.socket.close();
               this.socket = null;
               this.disabled = true;
-              this.placeholder = "Disconnected";
+              this.placeholder = "Disconnected. Reload to connect.";
             }
           },
 
           send() {
             if (this.input) {
-              socket.send(this.input);
-              this.input = "";
+              if (this.input.startsWith("E.") || this.input.startsWith("e.")) {
+                socket.close();
+                this.input = "";
+              } else {
+                this.messages.unshift(this.input);
+                this.messages.splice(1024);
+                socket.send(this.input);
+                this.input = "";
+              }
             }
           },
         }));
