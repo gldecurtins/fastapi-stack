@@ -52,7 +52,7 @@ class MessageManager:
         self, received_text: str, websocket: WebSocket, connections: dict
     ):
         try:
-            to_user = received_text.split()[1].title()
+            to_user = received_text.split()[1].capitalize()
             text = f"<*{connections[websocket]['user_name']}*> {received_text.split(' ', 2)[2]}"
 
             for connection, detail in connections.items():
@@ -88,11 +88,27 @@ class MessageManager:
             )
 
     async def show_connections(self, websocket: WebSocket, connections: dict):
+        await self.send_text_to_user(
+            f"+---------------------------------------+",
+            websocket,
+        )
         for connection in connections:
             await self.send_text_to_user(
-                f">> {connections[connection]['user_name']} @{connections[connection]['channel_name']}",
+                f"| {(connections[connection]['user_name'] + ' ').ljust(20, '.')} {connections[connection]['channel_name'].ljust(16)} |",
                 websocket,
             )
+        await self.send_text_to_user(
+            f"+---------------------------------------+",
+            websocket,
+        )
+        await self.send_text_to_user(
+            f"| Name:                Channel:         |",
+            websocket,
+        )
+        await self.send_text_to_user(
+            f"+---------------------------------------+",
+            websocket,
+        )
 
     async def help_cmd(self, websocket: WebSocket):
         help_text = [
