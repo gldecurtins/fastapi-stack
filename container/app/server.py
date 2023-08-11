@@ -3,7 +3,10 @@ from fastapi import WebSocket
 from faker import Faker
 
 
-def get_random_name():
+def get_random_name(websocket: WebSocket):
+    accept_language = str(websocket.headers.get("accept-language")).split(";")[0]
+    locales = accept_language.split(",")
+    faker = Faker(locales)
     faker = Faker()
     return faker.unique.first_name()
 
@@ -14,17 +17,13 @@ class ServerManager:
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.connections[websocket] = {}
-        self.connections[websocket]["user_name"] = get_random_name()
+        self.connections[websocket]["user_name"] = get_random_name(websocket)
         self.connections[websocket]["channel_name"] = "1"
         text_to_send = f">> {self.connections[websocket]['user_name']} connected"
         await MessageManager().send_text_to_user(text_to_send, websocket)
-        await MessageManager().send_text_to_channel(
-            text_to_send, websocket, self.connections
-        )
+        await MessageManager().send_text_to_channel(text_to_send, websocket, self.connections)
 
     async def disconnect(self, websocket: WebSocket):
         text_to_send = f">> {self.connections[websocket]['user_name']} disconnected"
-        await MessageManager().send_text_to_channel(
-            text_to_send, websocket, self.connections
-        )
+        await MessageManager().send_text_to_channel(text_to_send, websocket, self.connections)
         del self.connections[websocket]
