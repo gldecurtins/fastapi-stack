@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  stack:
-    image: ghcr.io/gldecurtins/stack:main
+  fastapi-stack:
+    image: ghcr.io/gldecurtins/fastapi-stack:main
     networks:
       - traefik
     ports:
@@ -13,10 +13,10 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.lbswarm=true"
-        - "traefik.http.routers.stack.rule=Host(`stack.uemd.net`)"
-        - "traefik.http.routers.stack.entrypoints=websecure"
-        - "traefik.http.routers.stack.service=stack"
-        - "traefik.http.services.stack.loadbalancer.server.port=2001"
+        - "traefik.http.routers.fastapi-stack.rule=Host(`fastapi-stack.uemd.net`)"
+        - "traefik.http.routers.fastapi-stack.entrypoints=websecure"
+        - "traefik.http.routers.fastapi-stack.service=fastapi-stack"
+        - "traefik.http.services.fastapi-stack.loadbalancer.server.port=2001"
 
 
 networks:
