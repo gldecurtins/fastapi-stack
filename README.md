@@ -1,12 +1,12 @@
 # Stack server
 
-Text-only chat with websockets. Minimalistic desgin.
+Text-only chat with websockets. FastAPI backend, minimalistic desgin.
 
 # Installation
 
 Clone repo and install library::
 
-    $ git clone git@github.com:gldecurtins/stack.git
+    $ git clone git@github.com:gldecurtins/fastapi-stack.git
     $ cd stack
 
 Run application::
