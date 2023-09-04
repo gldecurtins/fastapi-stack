@@ -2,23 +2,6 @@ version: "3.9"
 
 services:
   fastapi-stack:
-    image: ghcr.io/gldecurtins/fastapi-stack:main
-    networks:
-      - traefik
+    image: ghcr.io/gldecurtins/fastapi-stack:latest
     ports:
       - "2001:2001"
-    deploy:
-      mode: replicated
-      replicas: 1
-      labels:
-        - "traefik.enable=true"
-        - "traefik.docker.lbswarm=true"
-        - "traefik.http.routers.fastapi-stack.rule=Host(`fastapi-stack.uemd.net`)"
-        - "traefik.http.routers.fastapi-stack.entrypoints=websecure"
-        - "traefik.http.routers.fastapi-stack.service=fastapi-stack"
-        - "traefik.http.services.fastapi-stack.loadbalancer.server.port=2001"
-
-
-networks:
-  traefik:
-    external: true
